@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alphabet Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #ffecd2, #fcb69f);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    .quiz-container {
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .video-container {
+      margin-bottom: 15px;
+    }
+    .btn-option {
+      margin: 8px 0;
+      width: 100%;
+      border-radius: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .progress {
+      height: 25px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+    }
+    .star {
+      font-size: 25px;
+      color: gray;
+    }
+    .star.gold {
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>Alphabet Quiz</h2>
+    
+    <!-- Video Tutorial -->
+    <div class="video-container">
+      <video width="100%" height="200" controls>
+        <source src="sample_video.mp4" type="video/mp4">
+        Your browser does not support video.
+      </video>
+    </div>
+
+    <!-- Stars -->
+    <div id="stars">
+      <span class="star">&#9733;</span>
+      <span class="star">&#9733;</span>
+      <span class="star">&#9733;</span>
+      <span class="star">&#9733;</span>
+      <span class="star">&#9733;</span>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress">
+      <div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
+    </div>
+
+    <!-- Question -->
+    <h4 id="question"></h4>
+    <div id="options"></div>
+  </div>
+
+  <script>
+    let allQuestions = {};
+    let stageQuestions = [];
+    let currentStage = 1;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let stars = document.querySelectorAll(".star");
+    let readInterval;
+
+    async function loadQuestions() {
+      const res = await fetch("./alphabetQuestions.json");
+      allQuestions = await res.json();
+      loadStageQuestions(currentStage);
+    }
+
+    function loadStageQuestions(stage) {
+      const stageKey = `stage${stage}`;
+      const pool = allQuestions[stageKey];
+      stageQuestions = pool.sort(() => 0.5 - Math.random()).slice(0, 5);
+      currentQuestionIndex = 0;
+      score = 0;
+      stars.forEach(star => star.classList.remove("gold"));
+      showQuestion();
+    }
+
+    function showQuestion() {
+      clearInterval(readInterval);
+      let q = stageQuestions[currentQuestionIndex];
+      document.getElementById("question").textContent = q.question;
+      let optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      q.options.forEach(opt => {
+        let btn = document.createElement("button");
+        btn.className = "btn btn-primary btn-option";
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsDiv.appendChild(btn);
+      });
+      speakQuestion(q.question);
+      readInterval = setInterval(() => speakQuestion(q.question), 15000);
+      updateProgress();
+    }
+
+    function checkAnswer(selected) {
+      clearInterval(readInterval);
+      let correct = stageQuestions[currentQuestionIndex].answer;
+      if (selected === correct) {
+        score++;
+        if (score <= 5) stars[score-1].classList.add("gold");
+      }
+      currentQuestionIndex++;
+      if (currentQuestionIndex < stageQuestions.length) {
+        showQuestion();
+      } else {
+        if (score >= 3 && currentStage < 3) {
+          alert(`Great! You passed Stage ${currentStage}. Moving to Stage ${currentStage+1}`);
+          currentStage++;
+          loadStageQuestions(currentStage);
+        } else if (currentStage === 3) {
+          alert("🎉 Congratulations! You completed all stages of the Alphabet Quiz!");
+        } else {
+          alert("Oops! Try again.");
+          loadStageQuestions(currentStage);
+        }
+      }
+    }
+
+    function updateProgress() {
+      let percent = ((currentQuestionIndex) / stageQuestions.length) * 100;
+      document.getElementById("progressBar").style.width = percent + "%";
+      document.getElementById("progressBar").textContent = Math.round(percent) + "%";
+    }
+
+    function speakQuestion(text) {
+      let msg = new SpeechSynthesisUtterance(text);
+      msg.lang = "en-US";
+      window.speechSynthesis.speak(msg);
+    }
+
+    window.onload = loadQuestions;
+  </script>
+</body>
+</html>

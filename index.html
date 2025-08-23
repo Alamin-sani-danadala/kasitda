@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EduPlay - Landing</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-btn {
+      font-size: 1.5rem;
+      padding: 2rem;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: transform 0.2s ease;
+    }
+
+    .category-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .modal-content {
+      border-radius: 20px;
+      background: #fff7f0;
+    }
+
+    .modal-header {
+      background: #ffcc80;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .modal-title {
+      font-weight: bold;
+      color: #5d4037;
+    }
+
+    /* Illustrations */
+    .bg-illustration {
+      position: absolute;
+      z-index: 0;
+      opacity: 0.15;
+    }
+
+    .bg-kid-left {
+      left: 5%;
+      bottom: 5%;
+      width: 200px;
+    }
+
+    .bg-kid-right {
+      right: 5%;
+      top: 5%;
+      width: 180px;
+    }
+
+    .bg-books {
+      left: 50%;
+      bottom: 10%;
+      transform: translateX(-50%);
+      width: 250px;
+    }
+
+    .content {
+      z-index: 1;
+      position: relative;
+    }
+
+    #kidAvatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .welcome-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background Illustrations -->
+  <img src="https://cdn-icons-png.flaticon.com/512/3048/3048122.png" class="bg-illustration bg-kid-left"
+    alt="Kid illustration">
+  <img src="https://cdn-icons-png.flaticon.com/512/3048/3048127.png" class="bg-illustration bg-kid-right"
+    alt="Kid illustration">
+  <img src="https://cdn-icons-png.flaticon.com/512/3082/3082058.png" class="bg-illustration bg-books"
+    alt="Books illustration">
+
+  <!-- Landing Content -->
+  <div class="container text-center content">
+    <div class="welcome-container">
+      <img id="kidAvatar" src="" alt="Kid Avatar" style="display: none;">
+      <h1 class="fw-bold" id="welcomeText">Welcome to EduPlay 🎉</h1>
+    </div>
+    <div class="d-flex justify-content-center gap-4">
+      <a href="./nursery/index.html" class="btn btn-success category-btn">🌱 Nursery</a>
+      <a href="#" class="btn btn-primary category-btn" data-bs-toggle="modal" data-bs-target="#comingSoonModal">📚
+        Primary</a>
+    </div>
+  </div>
+
+  <!-- Kid Info Modal -->
+  <div class="modal fade" id="kidInfoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <div class="modal-header">
+          <h5 class="modal-title">👦👧 Enter Your Details</h5>
+        </div>
+        <div class="modal-body">
+          <form id="kidForm">
+            <div class="mb-3">
+              <label for="kidName" class="form-label">Your Name</label>
+              <input type="text" class="form-control" id="kidName" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Gender</label>
+              <select class="form-select" id="kidGender" required>
+                <option value="" disabled selected>Select gender</option>
+                <option value="boy">Boy</option>
+                <option value="girl">Girl</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="kidAge" class="form-label">Age</label>
+              <input type="number" class="form-control" id="kidAge" min="3" max="12" required>
+            </div>
+            <button type="submit" class="btn btn-warning w-100 fw-bold">Start 🚀</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="comingSoonModal" tabindex="-1" aria-labelledby="comingSoonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center bg-light">
+
+        <!-- Header -->
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title w-100 fw-bold" id="comingSoonModalLabel">🎉 Coming Soon! 🎉</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body">
+          <p class="fs-4">✨ This adventure isn’t ready yet... ✨</p>
+          <p class="fs-5">But don’t worry, something <span class="text-warning fw-bold">amazing</span> is on the way! 🚀
+          </p>
+          <p class="fs-6 text-muted">Stay tuned, champion 🌟</p>
+          <div class="mt-3">
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712107.png" alt="Fun Kid Icon" width="100"
+              class="rounded-circle shadow-sm">
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn btn-success rounded-pill px-4" data-bs-dismiss="modal">
+            🎮 Got it!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const welcomeText = document.getElementById("welcomeText");
+    const kidAvatar = document.getElementById("kidAvatar");
+
+    // Avatar images
+    const avatars = {
+      boy: "https://cdn-icons-png.flaticon.com/512/3048/3048122.png",
+      girl: "https://cdn-icons-png.flaticon.com/512/3048/3048127.png"
+    };
+
+    // Show modal if no kid info in localStorage
+    window.onload = function () {
+      const kidInfo = JSON.parse(localStorage.getItem("kidInfo"));
+      if (!kidInfo) {
+        var myModal = new bootstrap.Modal(document.getElementById('kidInfoModal'));
+        myModal.show();
+      } else {
+        showWelcome(kidInfo);
+      }
+    }
+
+    // Save kid info in localStorage
+    document.getElementById('kidForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const kidInfo = {
+        name: document.getElementById("kidName").value,
+        gender: document.getElementById("kidGender").value,
+        age: document.getElementById("kidAge").value
+      };
+
+      localStorage.setItem("kidInfo", JSON.stringify(kidInfo));
+
+      // Close modal
+      var modalEl = document.getElementById('kidInfoModal');
+      var modal = bootstrap.Modal.getInstance(modalEl);
+      modal.hide();
+
+      showWelcome(kidInfo);
+    });
+
+    function showWelcome(kidInfo) {
+      welcomeText.innerHTML = `Welcome, ${kidInfo.name}! 🎉`;
+      if (kidInfo.gender && avatars[kidInfo.gender]) {
+        kidAvatar.src = avatars[kidInfo.gender];
+        kidAvatar.style.display = "inline-block";
+      }
+    }
+  </script>
+</body>
+
+</html>

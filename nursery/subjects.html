@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subjects</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+      min-height: 100vh;
+      /* padding: 2rem 1rem; */
+      position: relative;
+      overflow: hidden;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      width: 70%;
+    }
+    .welcome-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    #kidAvatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .subject-card {
+      border-radius: 20px;
+      padding: 2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-align: center;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      color: white;
+    }
+    .subject-card:hover {
+      transform: scale(1.05);
+    }
+    .math {
+      background: #ff8a65;
+    }
+    .english {
+      background: #9575cd;
+    }
+    .science {
+      background: #4db6ac;
+    }
+    .subject-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    /* Fun background */
+    .bg-illustration {
+      position: absolute;
+      z-index: 0;
+      opacity: 0.1;
+    }
+    .bg-left {
+      left: 5%;
+      bottom: 10%;
+      width: 200px;
+    }
+    .bg-right {
+      right: 5%;
+      top: 10%;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background illustrations -->
+  <img src="https://cdn-icons-png.flaticon.com/512/146/146007.png" class="bg-illustration bg-left" alt="Kid illustration">
+  <img src="https://png.pngtree.com/png-clipart/20190902/original/pngtree-cute-girl-avatar-element-icon-png-image_4393286.jpg" class="bg-illustration bg-right" alt="Kid illustration">
+
+  <!-- Content -->
+  <div class="container text-center">
+    <div class="welcome-container">
+      <img id="kidAvatar" src="" alt="Kid Avatar" style="display: none;">
+      <h2 id="welcomeText">Welcome, Kid 🎉</h2>
+    </div>
+    <h4 id="classTitle" class="mb-4 fw-bold"></h4>
+    <div class="row justify-content-center g-4">
+      <div class="col-md-4">
+        <a href="./subjects/math.html" class="subject-card math">
+          <div class="subject-icon">🔢</div>
+          Math
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="./subjects/english.html" class="subject-card english">
+          <div class="subject-icon">📖</div>
+          English
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="#" class="subject-card science">
+          <div class="subject-icon">🔬</div>
+          Science
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Avatar images
+    const avatars = {
+      boy: "https://cdn-icons-png.flaticon.com/512/3048/3048122.png",
+      girl: "https://cdn-icons-png.flaticon.com/512/3048/3048127.png"
+    };
+
+    // Load kid info
+    const kidInfo = JSON.parse(localStorage.getItem("kidInfo"));
+    const welcomeText = document.getElementById("welcomeText");
+    const kidAvatar = document.getElementById("kidAvatar");
+    const classTitle = document.getElementById("classTitle");
+
+    if (kidInfo) {
+      welcomeText.innerHTML = `Hi ${kidInfo.name}! 🎉`;
+      if (kidInfo.gender && avatars[kidInfo.gender]) {
+        kidAvatar.src = avatars[kidInfo.gender];
+        kidAvatar.style.display = "inline-block";
+      }
+    }
+
+    // Get class from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedClass = urlParams.get("class");
+
+    if (selectedClass === "nursery1") {
+      classTitle.innerHTML = "Nursery 1 - Choose Your Subject 📚";
+    } else if (selectedClass === "nursery2") {
+      classTitle.innerHTML = "Nursery 2 - Choose Your Subject 📚";
+    } else {
+      classTitle.innerHTML = "Choose Your Subject 📚";
+    }
+  </script>
+</body>
+</html>
