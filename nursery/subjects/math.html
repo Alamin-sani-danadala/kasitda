@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Math Topics - Nursery</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <link href="../assets/css/bootstrap.min.css" rel="stylesheet"> -->
   <style>
     body {
       background: linear-gradient(to right, #e0f7fa, #e1bee7);
@@ -36,29 +37,29 @@
     <div class="header-text">Math Topics</div>
     <div class="row g-4">
       <!-- Numbers -->
-      <div class="col-md-6 col-12">
+      <!-- <div class="col-md-6 col-12">
         <div class="card text-center p-3 topic-card bg-warning" onclick="goToQuiz('numbers')">
           <div class="topic-icon">🔢</div>
           <h5 class="mt-2">Numbers</h5>
         </div>
-      </div>
+      </div> -->
       <!-- Shapes -->
-      <div class="col-md-6 col-12">
+      <!-- <div class="col-md-6 col-12">
         <div class="card text-center p-3 topic-card bg-info">
           <div class="topic-icon">🔺</div>
           <h5 class="mt-2">Shapes</h5>
         </div>
-      </div>
+      </div> -->
       <!-- Addition -->
       <div class="col-md-6 col-12">
-        <div class="card text-center p-3 topic-card bg-success text-white">
+        <div class="card text-center p-3 topic-card bg-success text-white"  onclick="goToQuiz('addition')">
           <div class="topic-icon">➕</div>
           <h5 class="mt-2">Addition</h5>
         </div>
       </div>
       <!-- Subtraction -->
       <div class="col-md-6 col-12">
-        <div class="card text-center p-3 topic-card bg-danger text-white">
+        <div class="card text-center p-3 topic-card bg-danger text-white" onclick="goToQuiz('subtraction')">
           <div class="topic-icon">➖</div>
           <h5 class="mt-2">Subtraction</h5>
         </div>
@@ -71,7 +72,7 @@
       // Save topic to local storage
       localStorage.setItem("selectedTopic", topic);
       // Redirect to quiz page (placeholder)
-      window.location.href = "numbers.html";
+      window.location.href = topic + ".html";
     }
   </script>
 </body>

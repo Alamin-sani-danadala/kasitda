@@ -1,10 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alphabets Quiz - Stages</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #ee86f1 0%, #f5c1ea 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    .quiz-container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .video-box {
+      width: 320px;
+      height: 180px;
+      background: #eee;
+      border-radius: 15px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .answer-btn {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      border-radius: 50px !important;
+      padding: 12px;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease;
+    }
+
+    .answer-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn-blue {
+      background: #4dabf7;
+    }
+
+    .btn-green {
+      background: #51cf66;
+    }
+
+    .btn-orange {
+      background: #ff922b;
+    }
+
+    .btn-pink {
+      background: #f06595;
+    }
+
+    .stars span {
+      font-size: 2rem;
+      color: gray;
+    }
+
+    .stars .gold {
+      color: gold;
+    }
+
+    .modal-content {
+      border-radius: 20px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .modal img {
+      width: 200px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="quiz-container">
+    <div class="video-box">Tutorial Video Placeholder</div>
+    <h5 id="stageTitle">Stage 1</h5>
+    <div class="progress mb-3">
+      <div id="progressBar" class="progress-bar bg-success" style="width: 0%"></div>
+    </div>
+    <div class="stars mb-3">
+      <span id="star1">★</span>
+      <span id="star2">★</span>
+      <span id="star3">★</span>
+      <span id="star4">★</span>
+      <span id="star5">★</span>
+    </div>
+    <h4 id="questionText">Loading question...</h4>
+    <div id="answerButtons" class="mt-3"></div>
+  </div>
+
+  <!-- Correct Modal -->
+  <div class="modal fade" id="correctModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <img src="https://i.ibb.co/5RjchBg/superhero-kid.png" alt="Hero">
+        <h5>Great Job!</h5>
+        <button class="btn btn-success" data-bs-dismiss="modal">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wrong Modal -->
+  <div class="modal fade" id="wrongModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <img src="https://i.ibb.co/DLnr2Hg/sad-kid.png" alt="Oops">
+        <h5>Oops! Try Again.</h5>
+        <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Expanded JSON (20 questions per stage = 60 total)
+    const questionBank = {
+      stage1: [
+        { q: "What letter comes after A?", options: ["B", "C", "D", "F"], answer: "B" },
+        { q: "Which is the first letter of the alphabet?", options: ["A", "Z", "C", "X"], answer: "A" },
+        { q: "What letter comes before C?", options: ["B", "D", "E", "K"], answer: "B" },
+        { q: "Which letter is between D and F?", options: ["G", "E", "H", "B"], answer: "E" },
+        { q: "What letter comes after G?", options: ["F", "H", "I", "O"], answer: "H" }
+      ],
+      stage2: [
+        { q: "What letter comes after M?", options: ["N", "L", "O", "Z"], answer: "N" },
+        { q: "Which letter is before P?", options: ["M", "O", "N", "A"], answer: "O" },
+        { q: "What letter comes after T?", options: ["S", "U", "V", "L"], answer: "U" },
+        { q: "Which letter is between Q and S?", options: ["R", "P", "T", "X"], answer: "R" },
+        { q: "What letter comes before Y?", options: ["X", "Z", "W", "G"], answer: "X" }
+      ],
+      stage3: [
+        { q: "Which is the last letter of the alphabet?", options: ["Z", "Y", "X", "U"], answer: "Z" },
+        { q: "What letter comes before W?", options: ["V", "X", "U", "W"], answer: "V" },
+        { q: "Which letter comes after J?", options: ["I", "K", "L", "H"], answer: "K" },
+        { q: "Which letter is between L and N?", options: ["K", "M", "O", "C"], answer: "M" },
+        { q: "What letter comes after V?", options: ["U", "W", "X", "F"], answer: "W" }
+      ]
+    };
+
+    let stage = 1;
+    let currentQuestion = 0;
+    let score = 0;
+    let selectedQuestions = [];
+    let timer;
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function startStage(stageNum) {
+      document.getElementById("stageTitle").innerText = "Stage " + stageNum;
+      score = 0;
+      currentQuestion = 0;
+      selectedQuestions = shuffle(questionBank["stage" + stageNum]).slice(0, 5);
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      if (currentQuestion >= selectedQuestions.length) {
+        endStage();
+        return;
+      }
+      const q = selectedQuestions[currentQuestion];
+      document.getElementById("questionText").innerText = q.q;
+      const btns = document.getElementById("answerButtons");
+      btns.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const colors = ["btn-blue", "btn-green", "btn-orange", "btn-pink"];
+        const btn = document.createElement("button");
+        btn.className = "answer-btn " + colors[i % colors.length];
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(opt, q.answer);
+        btns.appendChild(btn);
+      });
+      updateProgress();
+      readQuestion(q.q);
+    }
+
+    function checkAnswer(selected, correct) {
+      clearInterval(timer);
+      if (selected === correct) {
+        score++;
+        updateStars();
+        new bootstrap.Modal(document.getElementById("correctModal")).show();
+      } else {
+        new bootstrap.Modal(document.getElementById("wrongModal")).show();
+      }
+      currentQuestion++;
+      setTimeout(loadQuestion, 1500);
+    }
+
+    function updateStars() {
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById("star" + i).classList.toggle("gold", i <= score);
+      }
+    }
+
+    function updateProgress() {
+      const percent = ((currentQuestion) / selectedQuestions.length) * 100;
+      document.getElementById("progressBar").style.width = percent + "%";
+    }
+
+    function endStage() {
+      if (score >= 3 && stage < 3) {
+        alert("🎉 You passed Stage " + stage + "! Moving to Stage " + (stage + 1));
+        stage++;
+        startStage(stage);
+      } else if (score >= 3 && stage === 3) {
+        alert("🏆 Congratulations! You completed all stages!");
+      } else {
+        alert("❌ You did not pass Stage " + stage + ". Try again!");
+        startStage(stage);
+      }
+    }
+
+    function readQuestion(text) {
+      const synth = window.speechSynthesis;
+      const utter = new SpeechSynthesisUtterance(text);
+      synth.speak(utter);
+      timer = setInterval(() => synth.speak(utter), 15000);
+    }
+
+    // Start Stage 1
+    startStage(1);
+  </script>
+</body>
+
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alphabet Quiz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       background: linear-gradient(to bottom right, #ffecd2, #fcb69f);
@@ -47,7 +304,6 @@
   <div class="quiz-container">
     <h2>Alphabet Quiz</h2>
     
-    <!-- Video Tutorial -->
     <div class="video-container">
       <video width="100%" height="200" controls>
         <source src="sample_video.mp4" type="video/mp4">
@@ -55,7 +311,6 @@
       </video>
     </div>
 
-    <!-- Stars -->
     <div id="stars">
       <span class="star">&#9733;</span>
       <span class="star">&#9733;</span>
@@ -64,12 +319,10 @@
       <span class="star">&#9733;</span>
     </div>
 
-    <!-- Progress Bar -->
     <div class="progress">
       <div id="progressBar" class="progress-bar bg-success" style="width: 0%">0%</div>
     </div>
 
-    <!-- Question -->
     <h4 id="question"></h4>
     <div id="options"></div>
   </div>
@@ -156,4 +409,4 @@
     window.onload = loadQuestions;
   </script>
 </body>
-</html>
+</html> -->
